@@ -1,0 +1,42 @@
+public static Tuple<double[],int[]> ExtendedBottomUpCutRod(double[] p, int n)
+{
+    double q = 0;
+    double[] r = new double[n + 1];
+    //The s array holds the optimal size i of the first piece to cut when solving a subproblem of size j
+    int[] s = new int[n + 1];
+    r[0] = 0;
+    for (int j = 1; j <= n; j++)
+    {
+        q = double.MinValue;
+        for (int i = 1; i <= j; i++)
+        {
+            if (q<p[i]+r[j-i])
+            {
+                q = p[i] + r[j - i];
+                s[j] = i;
+            }
+
+        }
+        r[j] = q;
+    }
+    return Tuple.Create(r,s);
+}
+
+public static void PrintCutRodSolution(double[] p, int n)
+{
+    Tuple<double[], int[]> result = ExtendedBottomUpCutRod(p, n);
+    double[] revenues = result.Item1;
+    int[] cuts = result.Item2;
+    double cutrevenue = revenues[n];
+
+    Console.Write("Cut rod into lengths: ");
+    while (n > 0)
+    {
+        Console.Write(cuts[n] + " ");
+        n = n - cuts[n];
+    }
+    Console.WriteLine();
+    Console.WriteLine("Total revenue: " + cutrevenue.ToString());
+ 
+            
+}
